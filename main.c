@@ -10,9 +10,8 @@
 // sudo insmod abcde.ko to start thread
 // sudo rmmod abcde.ko to kill thread
 
-const int n = 5; // no. of threads
 // global array of kernel threads
-static struct task_struct kthreads[n];
+static struct task_struct kthreads_arr[5];
 
 int thread_function(void* void_tid_ptr) {
   unsigned int i = 0;
@@ -51,8 +50,8 @@ static int __init module_init_fn(void) {
   int i = 0;
   printk(KERN_INFO "Initializing thread module\n");
   
-  for (i = 0; i < n; i++) {
-    if (initialize_thread(&kthreads[i], i) == -1) {
+  for (i = 0; i < 5; i++) {
+    if (initialize_thread(&kthreads_arr[i], i) == -1) {
       return -1;
     }
   }
@@ -66,8 +65,8 @@ static void __exit module_exit_fn(void) {
   int ret = 0;
   printk(KERN_INFO "exiting thread module\n");
 
-  for (i = 0; i < n; i++) {
-    ret = kthread_stop( & kthreads[i]);
+  for (i = 0; i < 5; i++) {
+    ret = kthread_stop( & kthreads_arr[i]);
     if (!ret) {
       printk("can't stop thread %d", i);
     }
