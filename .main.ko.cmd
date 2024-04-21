@@ -1,1 +1,0 @@
-savedcmd_/home/mafishere/Desktop/os-project/main.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/mafishere/Desktop/os-project/main.ko /home/mafishere/Desktop/os-project/main.o /home/mafishere/Desktop/os-project/main.mod.o;  make -f ./arch/x86/Makefile.postlink /home/mafishere/Desktop/os-project/main.ko

@@ -4,11 +4,16 @@
 #include<linux/delay.h>      // for msleep(milliseconds)
 #include<linux/sched.h>      // for struct tesk_struct
 
+// sudo apt remove --autoremove linux-headers-* (remove all linux headers)
+// sudo apt-get install linux-headers-$(uname -r) (instasll linux headers)
+
 // kthread_create(thread_function, &tid, (const char*) kthread_name);
 // wake_up_process(kthread) to run thread
 // kthread_stop(&kthread)
-// sudo insmod abcde.ko to start thread
-// sudo rmmod abcde.ko to kill thread
+// sudo insmod main.ko to start thread
+// sudo rmmod main to kill thread
+// ps -ef
+// lsmod to show currently loaded kernel modules
 
 // global array of kernel threads
 static struct task_struct kthreads_arr[5];
