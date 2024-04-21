@@ -3,7 +3,7 @@
 #include<linux/init.h>       // for __init and __exit
 #include<linux/delay.h>      // for msleep(milliseconds)
 #include<linux/sched.h>      // for struct tesk_struct
-
+#define N 3 // no. of threads
 // sudo apt remove --autoremove linux-headers-* (remove all linux headers)
 // sudo apt-get install linux-headers-$(uname -r) (instasll linux headers)
 
@@ -16,7 +16,7 @@
 // lsmod to show currently loaded kernel modules
 
 // global array of kernel threads
-static struct task_struct kthreads_arr[5];
+static struct task_struct kthreads_arr[N];
 
 int thread_function(void* void_tid_ptr) {
   unsigned int i = 0;
@@ -55,7 +55,7 @@ static int __init module_init_fn(void) {
   int i = 0;
   printk(KERN_INFO "Initializing thread module\n");
   
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i < N; i++) {
     if (initialize_thread(&kthreads_arr[i], i) == -1) {
       return -1;
     }
@@ -70,7 +70,7 @@ static void __exit module_exit_fn(void) {
   int ret = 0;
   printk(KERN_INFO "exiting thread module\n");
 
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i < N; i++) {
     ret = kthread_stop( & kthreads_arr[i]);
     if (!ret) {
       printk("can't stop thread %d", i);
