@@ -4,8 +4,12 @@
 #include<linux/delay.h>      // for msleep(milliseconds)
 #include<linux/sched.h>      // for struct tesk_struct
 #define N 3 // no. of threads
-// sudo apt remove --autoremove linux-headers-* (remove all linux headers)
-// sudo apt-get install linux-headers-$(uname -r) (instasll linux headers)
+
+// sudo apt update
+// sudo apt-get install build-essential
+// sudo apt-get install linux-headers-$(uname -r) (install linux headers)
+// sudo apt-get install gcc-12
+// (warning! don't run) sudo apt remove --autoremove linux-headers-* (remove all linux headers)
 
 // kthread_create(thread_function, &tid, (const char*) kthread_name);
 // wake_up_process(kthread) to run thread
