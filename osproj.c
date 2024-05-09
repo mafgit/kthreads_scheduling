@@ -10,20 +10,6 @@
 #include <linux/signal.h>
 #define N 3
 
-// sudo apt update
-// sudo apt-get install build-essential
-// sudo apt-get install linux-headers-$(uname -r) (install linux headers)
-// sudo apt-get install gcc-12
-// (warning! don't run) sudo apt remove --autoremove linux-headers-* (remove all linux headers)
-
-// kthread_create(thread_function, &tid, (const char*) kthread_name);
-// wake_up_process(kthread) to run thread
-// kthread_stop(&kthread)
-// sudo insmod main.ko to start thread
-// sudo rmmod main to kill thread
-// ps -ef
-// lsmod to show currently loaded kernel modules
-
 struct task_struct threads[N];
 static int burst_times[N] = {2000, 3000, 1000}; // in milliseconds
 static int arrival_times[N] = {0, 1000, 2000};  // in milliseconds
