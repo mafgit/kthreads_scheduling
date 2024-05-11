@@ -39,6 +39,7 @@ int thread_func(void *data)
     {
         printk(KERN_INFO "OSPROJ: Thread %d running\n", info->id);
         msleep(1000);
+        (info->remaining_iterations)--;
     }
 
     printk(KERN_INFO "OSPROJ: Thread %d completed\n", info->id);
@@ -46,9 +47,9 @@ int thread_func(void *data)
 }
 
 static struct thread_data threads_data[NUM_THREADS] = {
-    {0, 5, 5, 0, LIST_HEAD_INIT(threads_data[0].list)},
-    {1, 3, 3, 0, LIST_HEAD_INIT(threads_data[1].list)},
-    {2, 7, 7, 0, LIST_HEAD_INIT(threads_data[2].list)}
+    {0, 5, 5, 3, LIST_HEAD_INIT(threads_data[0].list)},
+    {1, 3, 3, 2, LIST_HEAD_INIT(threads_data[1].list)},
+    {2, 7, 7, 1, LIST_HEAD_INIT(threads_data[2].list)}
     // LIST_HEAD_INIT: a macro provided by the linux kernel that initializes a list_head structure.
 };
 
@@ -96,20 +97,27 @@ static int __init init_thread(void)
         return PTR_ERR(scheduler_thread);
     }
 
-    for (int i = 0; i < NUM_THREADS; ++i)
+    for (int t = 0; t < 20; t++)
     {
-        list_add_tail(&threads_data[i].list, &ready_list);
-        // list_add_tail() is a macro provided by the Linux kernel for adding a new element to the end of a linked list. It takes two arguments: a pointer to the new element to be added and a pointer to the list head.
-        // TODO: ask for thread_data in input
-        // TODO: add arrival time functionality
-        my_threads[i] = kthread_create(thread_func, &threads_data[i], "my_thread_%d", threads_data[i].id);
-        if (IS_ERR(my_threads[i]))
+        printk(KERN_ERR "OSPROJ: t = %ds: ", t);
+        for (int i = 0; i < NUM_THREADS; ++i)
         {
-            printk(KERN_ERR "OSPROJ: Failed to create thread %d\n", i);
-            return PTR_ERR(my_threads[i]);
+            if (t == threads_data[i].arrival_time)
+            {
+                list_add_tail(&threads_data[i].list, &ready_list);
+                // list_add_tail() is a macro provided by the Linux kernel for adding a new element to the end of a linked list. It takes two arguments: a pointer to the new element to be added and a pointer to the list head.
+                my_threads[i] = kthread_create(thread_func, &threads_data[i], "my_thread_%d", threads_data[i].id);
+                if (IS_ERR(my_threads[i]))
+                {
+                    printk(KERN_ERR "OSPROJ: Failed to create thread %d\n", i);
+                    return PTR_ERR(my_threads[i]);
+                }
+                wake_up_process(my_threads[i]);
+                // wake up the process and move it to a set of runnable processes
+            }
         }
-        wake_up_process(my_threads[i]);
-        // wake up the process and move it to a set of runnable processes
+
+        msleep(1000);
     }
 
     return 0;
@@ -118,13 +126,22 @@ static int __init init_thread(void)
 static void __exit cleanup_thread(void)
 {
     for (int i = 0; i < NUM_THREADS; ++i)
-    {
         if (my_threads[i])
-        {
             kthread_stop(my_threads[i]);
-        }
+
+    struct thread_data *entry, *tmp;
+    list_for_each_entry_safe(entry, tmp, &ready_list, list)
+    {
+        list_del(&entry->list);
+        // list_del() is a macro provided by the Linux kernel for deleting an element from a linked list.
+        // It takes a pointer to the list_head structure of the element to be deleted.
+        kfree(entry);
+        // kfree() is a function provided by the Linux kernel for freeing memory allocated dynamically using kmalloc().
     }
 }
+
+// TODO: ask for thread_data in input
+// TODO: show table
 
 module_init(init_thread);
 module_exit(cleanup_thread);
