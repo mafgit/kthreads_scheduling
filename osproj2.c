@@ -97,27 +97,18 @@ static int __init init_thread(void)
         return PTR_ERR(scheduler_thread);
     }
 
-    for (int t = 0; t < 20; t++)
+    for (int i = 0; i < NUM_THREADS; ++i)
     {
-        printk(KERN_ERR "OSPROJ: t = %ds: ", t);
-        for (int i = 0; i < NUM_THREADS; ++i)
+        list_add_tail(&threads_data[i].list, &ready_list);
+        // list_add_tail() is a macro provided by the Linux kernel for adding a new element to the end of a linked list. It takes two arguments: a pointer to the new element to be added and a pointer to the list head.
+        my_threads[i] = kthread_create(thread_func, &threads_data[i], "my_thread_%d", threads_data[i].id);
+        if (IS_ERR(my_threads[i]))
         {
-            if (t == threads_data[i].arrival_time)
-            {
-                list_add_tail(&threads_data[i].list, &ready_list);
-                // list_add_tail() is a macro provided by the Linux kernel for adding a new element to the end of a linked list. It takes two arguments: a pointer to the new element to be added and a pointer to the list head.
-                my_threads[i] = kthread_create(thread_func, &threads_data[i], "my_thread_%d", threads_data[i].id);
-                if (IS_ERR(my_threads[i]))
-                {
-                    printk(KERN_ERR "OSPROJ: Failed to create thread %d\n", i);
-                    return PTR_ERR(my_threads[i]);
-                }
-                wake_up_process(my_threads[i]);
-                // wake up the process and move it to a set of runnable processes
-            }
+            printk(KERN_ERR "OSPROJ: Failed to create thread %d\n", i);
+            return PTR_ERR(my_threads[i]);
         }
-
-        msleep(1000);
+        wake_up_process(my_threads[i]);
+        // wake up the process and move it to a set of runnable processes
     }
 
     return 0;

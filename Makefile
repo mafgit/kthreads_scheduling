@@ -1,4 +1,4 @@
-obj-m += osproj.o
+obj-m += osproj2.o
 
 KDIR = /lib/modules/$(shell uname -r)/build
 
