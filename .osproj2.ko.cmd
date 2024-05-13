@@ -1,0 +1,1 @@
+savedcmd_/home/mafishere/kthreads_scheduling/osproj2.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/mafishere/kthreads_scheduling/osproj2.ko /home/mafishere/kthreads_scheduling/osproj2.o /home/mafishere/kthreads_scheduling/osproj2.mod.o;  make -f ./arch/x86/Makefile.postlink /home/mafishere/kthreads_scheduling/osproj2.ko

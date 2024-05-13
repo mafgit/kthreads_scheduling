@@ -47,9 +47,9 @@ int thread_func(void *data)
 }
 
 static struct thread_data threads_data[NUM_THREADS] = {
-    {0, 5, 5, 3, LIST_HEAD_INIT(threads_data[0].list)},
-    {1, 3, 3, 2, LIST_HEAD_INIT(threads_data[1].list)},
-    {2, 7, 7, 1, LIST_HEAD_INIT(threads_data[2].list)}
+    {0, 5, 5, 0, LIST_HEAD_INIT(threads_data[0].list)},
+    {1, 3, 3, 0, LIST_HEAD_INIT(threads_data[1].list)},
+    {2, 7, 7, 0, LIST_HEAD_INIT(threads_data[2].list)}
     // LIST_HEAD_INIT: a macro provided by the linux kernel that initializes a list_head structure.
 };
 

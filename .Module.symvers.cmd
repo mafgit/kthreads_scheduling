@@ -1,0 +1,1 @@
+savedcmd_/home/mafishere/kthreads_scheduling/Module.symvers :=  scripts/mod/modpost -m -a      -o /home/mafishere/kthreads_scheduling/Module.symvers -T /home/mafishere/kthreads_scheduling/modules.order -i Module.symvers -e 

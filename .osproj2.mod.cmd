@@ -1,0 +1,1 @@
+savedcmd_/home/mafishere/kthreads_scheduling/osproj2.mod := printf '%s\n'   osproj2.o | awk '!x[$$0]++ { print("/home/mafishere/kthreads_scheduling/"$$0) }' > /home/mafishere/kthreads_scheduling/osproj2.mod
